@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const deviceRouter = require('./routes/deviceis-routes');
-
+const schema = require('./graphql/deviceSchema');
+var graphqlHTTP = require('express-graphql');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -16,10 +17,15 @@ function db() {
 
 db();
 
-app.use(cors());
+app.use('*', cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/device', deviceRouter);
+// app.use('/device', deviceRouter);
+app.use('/graphql', cors(), graphqlHTTP({
+    schema: schema,
+    rootValue: global,
+    graphiql: true
+}))
 
 var server_port = process.env.YOUR_PORT || process.env.PORT || 80;
 var server_host = process.env.YOUR_HOST || '0.0.0.0';
