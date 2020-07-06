@@ -41,6 +41,12 @@ var queryType = new GraphQLObjectType({
             },
             device: {
                 type: deviceType,
+                args: {
+                    id: {
+                        name: '_id',
+                        type: GraphQLString
+                    }
+                },
                 resolve: function (root, params) {
                     const deviceDetails = DeviceIdModel.findById(params.id).exec();
                     if (!deviceDetails) {
